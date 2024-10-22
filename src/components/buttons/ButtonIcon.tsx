@@ -1,12 +1,11 @@
 import Image from "next/image";
 import { Button } from "./Button";
-import { PropsWithChildren } from "react";
 
 export const ButtonIcon = ({
   onClick,
-  disabled,
+  disabled = false,
   iconSrc,
-  iconAlt,
+  iconAlt = "",
   children,
 }: {
   onClick?: () => void;
@@ -21,7 +20,7 @@ export const ButtonIcon = ({
       onClick={onClick}
       disabled={disabled}>
       <Image src={iconSrc} alt={iconAlt} width={14} height={14} />
-      <span className="hidden md:inline">{children}</span>{" "}
+      <span className="hidden md:inline">{children}</span>
     </Button>
   );
 };
