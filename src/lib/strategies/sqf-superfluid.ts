@@ -5,7 +5,7 @@ export interface SQFSuperfluid extends CommonOptions {
 }
 
 export const defaults: Required<SQFSuperfluid> = {
-    baseStrategy: false,
+    baseStrategy: true,
     errors: commonDefaults.errors,
     allocationExt: true,
     allocatorsAllowlistExt: commonDefaults.allocatorsAllowlistExt,
