@@ -3,8 +3,12 @@
 import React, { useEffect, useState } from "react";
 import { SolidityCodeBlock } from "@/components/SolidityCodeBlock";
 import { ButtonGroup } from "@/components/ButtonGroup";
-import { CheckboxSection } from "@/components/sections/CheckboxSection";
-import { SettingsSection } from "@/components/sections/SettingsSection";
+import {
+  ExternalsSection,
+  FeaturesSection,
+  GatingSection,
+  SettingsSection,
+} from "@/components/sections";
 import { ControlsProvider, useControls } from "@/contexts/Controls";
 
 function AlloStrategyGenerator() {
@@ -41,18 +45,9 @@ contract ${strategyName} {
       <div className="flex flex-row gap-4 grow">
         <div className="bg-white p-size-4 rounded-[5px] shadow-custom w-64 flex flex-col shrink-0 h-[calc(100vh-84px)] overflow-auto">
           <SettingsSection />
-          <CheckboxSection
-            title="Features"
-            checkboxes={[
-              {
-                label: "Pausable",
-                checked: false,
-                onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
-                  console.log(e.target.checked);
-                },
-              },
-            ]}
-          />
+          <FeaturesSection />
+          <GatingSection />
+          <ExternalsSection />
         </div>
 
         <div className="flex flex-col grow overflow-auto h-[calc(100vh-84px)]">

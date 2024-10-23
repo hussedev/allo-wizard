@@ -18,9 +18,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Allo Contracts Wizard",
-  description:
-    "An interactive smart contract generator based on Allo Contracts.",
+  title: "Allo Strategies Wizard",
+  description: "An interactive strategy generator based on Allo.",
 };
 
 export default function RootLayout({

@@ -7,19 +7,36 @@ import {
   useReducer,
 } from "react";
 
+export type TFeatures =
+  | "registrable"
+  | "allocatable"
+  | "fromList"
+  | "milestones";
+
+export type TGating = "nft" | "eas" | "token";
+
+export type TExternals = "merkle" | "superfluid";
+
 interface ControlsState {
   settings: {
     strategyName: string;
   };
   features: {
-    pausable: boolean;
-    upgradable: boolean;
+    [key in TFeatures]: boolean;
+  };
+  gating: {
+    [key in TGating]: boolean;
+  };
+  externals: {
+    [key in TExternals]: boolean;
   };
 }
 
 type Action =
   | { type: "SET_STRATEGY_NAME"; payload: string }
-  | { type: "TOGGLE_FEATURE"; payload: keyof ControlsState["features"] };
+  | { type: "TOGGLE_FEATURE"; payload: keyof ControlsState["features"] }
+  | { type: "TOGGLE_GATING"; payload: keyof ControlsState["gating"] }
+  | { type: "TOGGLE_EXTERNAL"; payload: keyof ControlsState["externals"] };
 
 const ControlsContext = createContext<
   | {
@@ -27,6 +44,10 @@ const ControlsContext = createContext<
       setStrategyName: (name: string) => void;
       features: ControlsState["features"];
       toggleFeature: (feature: keyof ControlsState["features"]) => void;
+      gating: ControlsState["gating"];
+      toggleGating: (gating: keyof ControlsState["gating"]) => void;
+      externals: ControlsState["externals"];
+      toggleExternals: (external: keyof ControlsState["externals"]) => void;
     }
   | undefined
 >(undefined);
@@ -49,6 +70,22 @@ const controlsReducer = (
           [action.payload]: !state.features[action.payload],
         },
       };
+    case "TOGGLE_GATING":
+      return {
+        ...state,
+        gating: {
+          ...state.gating,
+          [action.payload]: !state.gating[action.payload],
+        },
+      };
+    case "TOGGLE_EXTERNAL":
+      return {
+        ...state,
+        externals: {
+          ...state.externals,
+          [action.payload]: !state.externals[action.payload],
+        },
+      };
     default:
       return state;
   }
@@ -60,8 +97,19 @@ export const ControlsProvider = ({ children }: PropsWithChildren) => {
       strategyName: "MyStrategy",
     },
     features: {
-      pausable: false,
-      upgradable: false,
+      registrable: false,
+      allocatable: false,
+      fromList: false,
+      milestones: false,
+    },
+    gating: {
+      nft: false,
+      eas: false,
+      token: false,
+    },
+    externals: {
+      merkle: false,
+      superfluid: false,
     },
   };
 
@@ -75,6 +123,14 @@ export const ControlsProvider = ({ children }: PropsWithChildren) => {
     dispatch({ type: "TOGGLE_FEATURE", payload: feature });
   };
 
+  const toggleGating = (gating: keyof ControlsState["gating"]) => {
+    dispatch({ type: "TOGGLE_GATING", payload: gating });
+  };
+
+  const toggleExternals = (external: keyof ControlsState["externals"]) => {
+    dispatch({ type: "TOGGLE_EXTERNAL", payload: external });
+  };
+
   return (
     <ControlsContext.Provider
       value={{
@@ -82,6 +138,10 @@ export const ControlsProvider = ({ children }: PropsWithChildren) => {
         setStrategyName,
         features: state.features,
         toggleFeature,
+        gating: state.gating,
+        toggleGating,
+        externals: state.externals,
+        toggleExternals,
       }}>
       {children}
     </ControlsContext.Provider>

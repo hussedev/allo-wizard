@@ -1,35 +1,40 @@
 import React from "react";
 import { ControlSection } from "./ControlSection";
 
-interface CheckboxProps {
-  label: string;
+interface CheckboxProps<T extends string> {
+  label: T;
+  displayName: string;
   checked?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: () => void;
 }
 
-interface CheckboxSectionProps {
+interface CheckboxSectionProps<T extends string> {
   title: string;
-  checkboxes: CheckboxProps[];
+  checkboxes: CheckboxProps<T>[];
+  values: Record<T, boolean>;
+  onChange: (value: T) => void;
   isFirst?: boolean;
 }
 
-export const CheckboxSection = ({
+export const CheckboxSection = <T extends string>({
   title,
   checkboxes,
+  values,
+  onChange,
   isFirst,
-}: CheckboxSectionProps) => {
+}: CheckboxSectionProps<T>) => {
   return (
     <ControlSection title={title} isFirst={isFirst}>
-      <div className="flex flex-col">
+      <div className="flex flex-col p-size-2">
         {checkboxes.map((checkbox, index) => (
-          <div key={index} className="flex items-center p-size-2">
+          <div key={index} className="flex items-center p-size-1">
             <input
               type="checkbox"
               className="mr-size-2"
-              checked={checkbox.checked}
-              onChange={checkbox.onChange}
+              checked={values[checkbox.label]}
+              onChange={() => onChange(checkbox.label)}
             />
-            <label>{checkbox.label}</label>
+            <label>{checkbox.displayName}</label>
           </div>
         ))}
       </div>
